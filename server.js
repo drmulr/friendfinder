@@ -15,16 +15,34 @@
 // 5. You should save your application's data inside of `app/data/friends.js` as an array of objects. Each of these objects should roughly follow the format below.
 
 
-var express = require('express');
-var body-parser = require('body-parser');
+var bodyParser = require('body-parser');
 var path = require('path');
-
+var express = require('express');
 var app = express();
 
+var PORT = process.env.PORT || 8080;
+
+//Grabbed from NPM Express start....
+//------------------------------------------------------------
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+require('./app/routing/apiRoutes.js')(app);
+
+// //saying, hey can you include html routes in this server file...and we want use express
+// require('./app/routing/apiRoutes.js')(app);
+// //require API routes first....that's where we get the data to put into HTML
+// require('./app/routing/htmlRoutes.js')(app);
 
 
 app.get('/', function (req, res) {
-  res.send('Hello World')
+  res.send('Hello World!')
 })
 
-app.listen(3000)
+
+app.listen(PORT, function () {
+  console.log('Example app listening on port: ' + PORT);
+})
