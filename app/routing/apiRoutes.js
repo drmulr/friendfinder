@@ -10,4 +10,11 @@ module.exports = function (app) {
 
 
 
+
+  //done later = once we start setting up the post features:
+  //res.json = boolean set up here so that we an trigger a diff message to user
+  app.post('/api/friends', function (req, res) {
+      friendsData.push(req.body);
+  })
+
 }
