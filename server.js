@@ -18,25 +18,17 @@ var PORT = process.env.PORT || 8080;
 //Grabbed from NPM Express start....
 //------------------------------------------------------------
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(bodyParser.json())
 
+//saying, hey can you include html routes in this server file...and we want use express
+//require API routes first....that's where we get the data to put into HTML
 require('./app/routing/apiRoutes.js')(app);
 require('./app/routing/htmlRoutes.js')(app);
 
-// //saying, hey can you include html routes in this server file...and we want use express
-// require('./app/routing/apiRoutes.js')(app);
-// //require API routes first....that's where we get the data to put into HTML
-// require('./app/routing/htmlRoutes.js')(app);
-
-
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
-
-
+//Listen up, server, things might happen:
 app.listen(PORT, function () {
   console.log('Example app listening on port: ' + PORT);
 })

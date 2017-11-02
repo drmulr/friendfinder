@@ -197,56 +197,118 @@
 			function validateForm() {
 				var isValid = true;
 				$('.form-control').each(function () {
-					if ($(this).val() === "")
+					if ($(this).val() == "")
 						isValid = false;
 				});
 				$('.chosen-select').each(function () {
 
-					if ($(this).val() === "")
+					if ($(this).val() == "")
 						isValid = false
 				})
 				return isValid;
 			}
 
 			//Validation = making sure all is filled out...based on class on input:
-			if (validateForm() === true) {
-				var userInput = {
-					name: $("#name").val(),
-					photo: $("#photo").val(),
-					scores: [$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val(), $("#q6").val(), $("#q7").val(), $("#q8").val(), $("#q9").val(), $("#q10").val()]
-				};
-				console.log(userInput);
+					if (validateForm() === true) {
+						var userInput = {
+							name: $("#name").val().trim(),
+							photo: $("#photo").val().trim(),
+							scores: []
+						}
+						for (var i = 1; i <= 10; i++) {
+							userInput.scores.push(parseInt($("#q" + i).val()));
+						}
+						console.log("User Input Before Send: " + JSON.stringify(userInput));
+						// };
 
-				$.post("/api/friends", userInput,
-					function (data) {
-						// If a table is available... tell user they are booked.
-						if (data) {
-							//DEV NOTE - REMOVE ALERTS
-							alert("New User Information Submitted!");
-						}
-						// If a table is available... tell user they on the waiting list.
-						else {
-							alert("Didn't get submitted for some reason?");
-						}
-						// Clear the form when submitting
-						$("#name").val("");
-						$("#photo").val("");
-						$("#q1").val("");
-						$("#q2").val("");
-						$("#q3").val("");
-						$("#q4").val("");
-						$("#q5").val("");
-						$("#q6").val("");
-						$("#q7").val("");
-						$("#q8").val("");
-						$("#q9").val("");
-						$("#q10").val("");
-					});
-			} else {
-				alert("For best results, fill in all the blanks!");
-			}
-		});
+
+						$.post("/api/friends", userInput, function (data) {
+							//Sending User Input - waiting for response in form of "data":
+
+							if (data) {
+								//DEV NOTE - REMOVE ALERTS
+								console.log("New User Information Submitted!");
+								console.log("Data Repsonse: " + JSON.stringify(data, null, 2));
+
+								// Grab the result from the AJAX post so that the best match's name and photo are displayed.
+								
+								$("#matchName").text(data.name);
+								$('#matchImg').attr("src", data.photo);
+								// Show the modal with the best match 
+								$("#resultsModal").modal('toggle');
+							}
+							// If a table is available... tell user they on the waiting list.
+							else {
+								alert("About 404 things went wrong here...");
+							}
+							//CLEAR FORM
+							$("#name").val("");
+							$("#photo").val("");
+							$("#q1").val("");
+							$("#q2").val("");
+							$("#q3").val("");
+							$("#q4").val("");
+							$("#q5").val("");
+							$("#q6").val("");
+							$("#q7").val("");
+							$("#q8").val("");
+							$("#q9").val("");
+							$("#q10").val("");
+						});
+					} else {
+						alert("For best results, fill in all the blanks!");
+					};
+
+			
+
+
+			//And here is what brings the whole bunch of potential best friends back!
+			// function runFriendQuery() {
+
+			// 	// Here we get the location of the root page.
+			// 	// We use this instead of explicitly saying the URL is localhost:3001 because the url will change when we deploy.
+			// 	var currentURL = window.location.origin;
+
+			// 	// The AJAX function uses the URL of our API to GET the data associated with it (initially set to localhost)
+			// 	$.ajax({ url: currentURL + "/api/friends", method: "GET" })
+			// 			.done(function (data) {
+			// 				// Here we are logging the URL so we have access to it for troubleshooting
+			// 				console.log("------------------------------------");
+			// 				console.log("URL: " + currentURL + "/api/friends");
+			// 				console.log("------------------------------------");
+
+			// 				// Here we then log the friends data to console, where it will show up as an object.
+			// 				// This is everybody:
+			// 				console.log(data);
+			// 				console.log("------------------------------------");
+
+			// 				// var userAnswersAll = JSON.stringify(data, null, 2);
+			// 				// console.log("User Answers All: " + userAnswersAll);
+			// 				// console.log("------------------------------------");
+
+			// 				var allUserData = JSON.stringify(data, 2, null);
+			// 				var currentUser = data[data.length-1].name;
+			// 				var userData = userInput.scores;
+			// 				// console.log("All User Data: " + allUserData);
+			// 				console.log("Current user: " + currentUser + " .");
+			// 				console.log("Current data: " + userData + " .");
+
+			// 				// TAKE USER INPUT DATA.
+			// 				for (var i = 0; i < data.length; i++) {
+	
+			// 					var difference = function (a, b) { 
+			// 						console.log("Diff #" + i + ": " + Math.abs(a - b)); 
+			// 					}
+			// 					difference(userData[0], data[i].scores[0]);
+			// 					difference(userData[1], data[i].scores[1]);
+			// 					difference(userData[2], data[i].scores[2]);
+			// 				};
+
+			// 			});
+			// };
+
+			// runFriendQuery();
+	});
   </script>
-
 </body>
 </html>

@@ -9,11 +9,17 @@ module.exports = function (app) {
   app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/../public/home.html'));
   });
+
   app.get('/survey', function(req, res) {
     res.sendFile(path.join(__dirname + '/../public/survey.html'));
   });
 
 
+
+
+
+  
+//DEFAULT URL
 //if already using app, and haven't already defined URL - go to homepage...any URL other than tables/reserve.
   app.use(function(req, res) {
     res.sendFile(path.join(__dirname + '/../public/home.html'));
